@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Power Trainer</title>
+
+        <!-- Third-party libraries -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+        />
+        <link rel="stylesheet" href="css/styles.css" />
+        <link rel="stylesheet" href="css/js-snackbar.min.css" />
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+        <style></style>
+    </head>
+    <body>
+        <template id="trash-icon-template"
+            ><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                    d="M20,6H16V5a3,3,0,0,0-3-3H11A3,3,0,0,0,8,5V6H4A1,1,0,0,0,4,8H5V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V8h1a1,1,0,0,0,0-2ZM10,5a1,1,0,0,1,1-1h2a1,1,0,0,1,1,1V6H10Zm7,14a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V8H17Z"
+                /></svg
+        ></template>
+
+        <div class="container">
+            <header class="header">
+                <h1>Power Trainer</h1>
+                <div class="settings-container">
+                    <button
+                        id="settings-btn"
+                        aria-label="Open settings"
+                    ></button>
+                    <div id="settings-menu" class="settings-panel">
+                        <table>
+                            <tr>
+                                <td>Units</td>
+                                <td>
+                                    <div class="unit-switcher">
+                                        <button id="unit-kg">kg</button
+                                        ><button id="unit-lbs">lbs</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Theme Hue</td>
+                                <td>
+                                    <input
+                                        type="range"
+                                        id="hue-slider"
+                                        min="0"
+                                        max="360"
+                                        step="1"
+                                    />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Mode</td>
+                                <td>
+                                    <button
+                                        id="theme-toggle"
+                                        aria-label="Toggle dark/light mode"
+                                    ></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Exercise Difficulty</td>
+                                <td>
+                                    <select id="difficulty-select">
+                                        <option value="beginner">
+                                            Beginner
+                                        </option>
+                                        <option value="intermediate">
+                                            Intermediate
+                                        </option>
+                                        <option value="advanced">
+                                            Advanced
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </header>
+            <main>
+                <section class="section">
+                    <h2>Generate a Workout</h2>
+                    <div class="btn-group">
+                        <button class="btn" id="full-body-btn">Full Body</button
+                        ><button class="btn" onclick="generateWorkout('push')">
+                            Push Day</button
+                        ><button class="btn" onclick="generateWorkout('pull')">
+                            Pull Day
+                        </button>
+                    </div>
+                </section>
+                <section class="section">
+                    <h2>Today's Workout</h2>
+                    <div id="workout-display">
+                        <p>Select a workout type above to get started!</p>
+                    </div>
+                </section>
+                <section class="section">
+                    <h2>Progression</h2>
+                    <select
+                        id="exercise-select"
+                        onchange="displayProgress(this.value)"
+                    ></select>
+                    <div id="progress-chart-container">
+                        <canvas id="progress-chart"></canvas>
+                    </div>
+                    <div id="progress-log">
+                        <p>Log a workout to see your history here.</p>
+                    </div>
+                </section>
+                <section class="section" id="history-tracker">
+                    <div class="calendar-header">
+                        <h2>History</h2>
+                        <div id="calendar-nav-controls">
+                            <input
+                                type="text"
+                                id="date-picker"
+                                placeholder="Select Month"
+                            />
+                            <button id="today-btn">Today</button>
+                        </div>
+                    </div>
+                    <div id="calendar-grid"></div>
+                </section>
+            </main>
+        </div>
+
+        <!-- Modal for workout history -->
+        <div id="workout-modal" class="modal-overlay">
+            <div class="modal-content">
+                <button class="modal-close-btn" aria-label="Close modal">
+                    ×
+                </button>
+                <h3 id="modal-title"></h3>
+                <div id="modal-body"></div>
+            </div>
+        </div>
+
+        <!-- Modal for exercise descriptions -->
+        <div id="description-modal" class="modal-overlay">
+            <div class="modal-content">
+                <button class="modal-close-btn" aria-label="Close modal">
+                    ×
+                </button>
+                <h3 id="description-modal-title"></h3>
+                <p id="description-modal-body"></p>
+            </div>
+        </div>
+        <script src="js/js-snackbar.min.js" type="text/javascript"></script>
+        <script src="js/constants.js" type="text/javascript"></script>
+        <script src="js/generateWorkouts.js" type="text/javascript"></script>
+        <script src="js/state.js" type="text/javascript"></script>
+        <script src="js/exercises.js" type="text/javascript"></script>
+        <script src="js/main.js" type="text/javascript"></script>
+    </body>
+</html>
